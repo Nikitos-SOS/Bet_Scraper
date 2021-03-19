@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/com/lib/Selenium/selenium-3.141.59-nodeps.jar!/" />
+      <root url="file://$PROJECT_DIR$/src/com/lib/Selenium/libs" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/src/com/lib/Selenium/selenium-3.141.59-nodeps-sources.jar!/" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/src/com/lib/Selenium/libs" recursive="false" />
+  </library>
+</component>
