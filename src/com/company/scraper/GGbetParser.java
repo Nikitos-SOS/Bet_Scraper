@@ -1,5 +1,6 @@
 package com.company.scraper;
 
+import com.company.ElementStruct;
 import com.google.common.base.Function;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,11 +8,13 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GGbetParser extends Thread {
     private final WebDriver driver;
     private final String elementClassName = "sportEventRow__body___3Ywcg";
+    private List<ElementStruct> elementStructList;
 
     @Override
     public void run() {
@@ -32,6 +35,7 @@ public class GGbetParser extends Thread {
 
         System.out.println("ggbets " + findElements().size());
 
+        this.elementStructList = listOfStructs(findElements());
         driver.quit();
     }
 
@@ -68,5 +72,43 @@ public class GGbetParser extends Thread {
 
     private List<WebElement> findElements(){
         return driver.findElements(By.className(this.elementClassName));
+    }
+
+
+    private List<ElementStruct> listOfStructs(List<WebElement> elements){
+//        Add a list of structs
+        List<ElementStruct> resultList = new LinkedList<>();
+//        The loop for get all events in struct
+        for (WebElement element : elements){
+            resultList.add(elementStruct(element));
+        }
+        return resultList;
+    }
+
+    private ElementStruct elementStruct(WebElement element){
+        ElementStruct elementStruct = new ElementStruct();
+//        Set Data from Element
+        elementStruct.setData(element.findElement(By.className("__app-DateTime-time")).getText());
+//        Set name of Team1
+        elementStruct.setTeam1(element.findElements(By.className("__app-LogoTitle-name")).get(0).getText());
+//        Set name of Team2
+        elementStruct.setTeam2(element.findElements(By.className("__app-LogoTitle-name")).get(1).getText());
+//        Set coefficient on Team1
+        try{
+            elementStruct.setX1(Float.parseFloat(element.findElements( By.className("odd__ellipsis___3b4Yk")).get(0).getText()));
+            elementStruct.setX2(Float.parseFloat(element.findElements( By.className("odd__ellipsis___3b4Yk")).get(1).getText()));
+        } catch(Exception e){
+            elementStruct.setX1(0);
+            elementStruct.setX2(0);
+        }
+//        elementStruct.setX1(Float.parseFloat(element.findElements( By.className("odd__ellipsis___3b4Yk")).get(0).getText()));
+////        Set coefficient on Team2
+//        elementStruct.setX2(Float.parseFloat(element.findElements( By.className("odd__ellipsis___3b4Yk")).get(1).getText()));
+
+        return elementStruct;
+    }
+
+    public List<ElementStruct> getElementStructList(){
+        return this.elementStructList;
     }
 }
