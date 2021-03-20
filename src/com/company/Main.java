@@ -2,18 +2,23 @@ package com.company;
 
 import com.company.scraper.GGbetParser;
 import com.company.scraper.ParimatchParser;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 //import com.company.scraper.Scraper;
 
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
 
+//        GGBet thread
         GGbetParser ggbet = new GGbetParser();
         Thread ggbetThread = new Thread(ggbet);
         ggbetThread.start();
 
-//        PariMatch thread and waiting for finish of thread
+//        PariMatch thread
         ParimatchParser pari = new ParimatchParser();
         Thread pariThread = new Thread(pari);
         pariThread.start();
@@ -26,8 +31,16 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println(pari.getElementStructList().get(0).getTeam1());
-        System.out.println(ggbet.getElementStructList().get(0).getTeam1());
+        JSONArray bkEvents = new JSONArray();
+        bkEvents.put(pari.getJsonEvents());
+        bkEvents.put(ggbet.getJsonEvents());
 
+//        JSONArray test
+        try {
+            System.out.println(bkEvents.getJSONObject(0));
+            System.out.println(bkEvents.getJSONObject(1));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
